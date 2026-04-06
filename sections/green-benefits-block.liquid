@@ -1,12 +1,7 @@
-{% comment %}
-  Green Benefits Block — Shopify Liquid Section
-  Colors: #0F6E56 | #1D9E75 | light green bg
-{% endcomment %}
-
 <style>
   .green-benefits {
-    background-color: {{ section.settings.bg_color }};
-    padding: {{ section.settings.padding_vertical }}px 20px;
+    background-color: var(--gb-bg);
+    padding: var(--gb-padding) 20px;
     font-family: inherit;
   }
 
@@ -33,12 +28,15 @@
   .green-benefits__text {
     font-size: 14px;
     font-weight: 600;
-    color: {{ section.settings.text_color }};
+    color: var(--gb-text);
     line-height: 1.3;
   }
 </style>
 
-<section class="green-benefits">
+<section
+  class="green-benefits"
+  style="--gb-bg: {{ section.settings.bg_color }}; --gb-text: {{ section.settings.text_color }}; --gb-padding: {{ section.settings.padding_vertical }}px;"
+>
   <div class="green-benefits__grid">
     {% for block in section.blocks %}
       <div class="green-benefits__item" {{ block.shopify_attributes }}>
@@ -85,8 +83,8 @@
         {
           "type": "text",
           "id": "icon",
-          "label": "Emoji / Icon",
-          "default": "✅"
+          "label": "Emoji",
+          "default": ""
         },
         {
           "type": "text",
@@ -104,29 +102,29 @@
         {
           "type": "benefit",
           "settings": {
-            "icon": "🛑",
+            "icon": "\uD83D\uDED1",
             "label": "El rascado se acaba"
           }
         },
         {
           "type": "benefit",
           "settings": {
-            "icon": "🐾",
-            "label": "Adiós al ciclo veterinario"
+            "icon": "\uD83D\uDC3E",
+            "label": "Adios al ciclo veterinario"
           }
         },
         {
           "type": "benefit",
           "settings": {
-            "icon": "🐶",
+            "icon": "\uD83D\uDC36",
             "label": "Recupera al perro de siempre"
           }
         },
         {
           "type": "benefit",
           "settings": {
-            "icon": "💸",
-            "label": "Sin más parches inútiles"
+            "icon": "\uD83D\uDCB8",
+            "label": "Sin mas parches inutiles"
           }
         }
       ]
