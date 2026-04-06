@@ -1,0 +1,136 @@
+{% comment %}
+  Green Benefits Block — Shopify Liquid Section
+  Colors: #0F6E56 | #1D9E75 | light green bg
+{% endcomment %}
+
+<style>
+  .green-benefits {
+    background-color: {{ section.settings.bg_color }};
+    padding: {{ section.settings.padding_vertical }}px 20px;
+    font-family: inherit;
+  }
+
+  .green-benefits__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .green-benefits__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .green-benefits__icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .green-benefits__text {
+    font-size: 14px;
+    font-weight: 600;
+    color: {{ section.settings.text_color }};
+    line-height: 1.3;
+  }
+</style>
+
+<section class="green-benefits">
+  <div class="green-benefits__grid">
+    {% for block in section.blocks %}
+      <div class="green-benefits__item" {{ block.shopify_attributes }}>
+        <span class="green-benefits__icon">{{ block.settings.icon }}</span>
+        <span class="green-benefits__text">{{ block.settings.label }}</span>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Green Benefits Block",
+  "tag": "section",
+  "class": "section-green-benefits",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#E6F5F0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#0F6E56"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Vertical padding (px)",
+      "min": 10,
+      "max": 80,
+      "step": 4,
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji / Icon",
+          "default": "✅"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Text",
+          "default": "Beneficio"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Green Benefits Block",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "🛑",
+            "label": "El rascado se acaba"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "🐾",
+            "label": "Adiós al ciclo veterinario"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "🐶",
+            "label": "Recupera al perro de siempre"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "💸",
+            "label": "Sin más parches inútiles"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
