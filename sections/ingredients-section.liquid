@@ -43,16 +43,12 @@
 
                 <div class="ing-section__card-media">
                   {%- if block.settings.image != blank -%}
-                    {{
-                      block.settings.image
-                      | image_url: width: 600
-                      | image_tag:
-                        loading: 'lazy',
-                        alt: block.settings.name,
-                        class: 'ing-section__card-img',
-                        widths: '300, 400, 600',
-                        sizes: '(min-width: 1024px) 25vw, (min-width: 640px) 45vw, 68vw'
-                    }}
+                    <img
+                      src="{{ block.settings.image | image_url: width: 600 }}"
+                      alt="{{ block.settings.name | escape }}"
+                      loading="lazy"
+                      class="ing-section__card-img"
+                    >
                   {%- else -%}
                     <div class="ing-section__card-placeholder" aria-hidden="true">
                       <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -68,7 +64,7 @@
                     type="button"
                     aria-expanded="false"
                     aria-controls="ing-body-{{ section.id }}-{{ forloop.index }}"
-                    aria-label="{{ block.settings.name | escape | append: ' — ver descripción' }}"
+                    aria-label="{{ block.settings.name | escape }}"
                     data-toggle
                   >
                     <span class="ing-section__toggle-icon" aria-hidden="true">+</span>
