@@ -2,15 +2,15 @@
 {%- assign t_italic = section.settings.title_italic -%}
 {%- assign t_after = section.settings.title_after -%}
 
-<section
-  class="ing-section"
-  id="ing-section-{{ section.id }}"
-  aria-labelledby="ing-heading-{{ section.id }}"
->
-  <div class="ing-section__container">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<section class="ing-s" id="ing-s-{{ section.id }}">
+  <div class="ing-s__container">
 
     {%- if t_before != blank or t_italic != blank or t_after != blank -%}
-      <h2 class="ing-section__heading" id="ing-heading-{{ section.id }}">
+      <h2 class="ing-s__heading">
         {%- if t_before != blank -%}{{ t_before | escape }}{%- endif -%}
         {%- if t_italic != blank -%} <em>{{ t_italic | escape }}</em>{%- endif -%}
         {%- if t_after != blank -%} {{ t_after | escape }}{%- endif -%}
@@ -18,60 +18,50 @@
     {%- endif -%}
 
     {%- if section.blocks.size > 0 -%}
-      <div class="ing-section__track-wrap">
-        <ul class="ing-section__grid" id="ing-grid-{{ section.id }}">
+      <div class="ing-s__track">
+        <ul class="ing-s__grid" id="ing-s-grid-{{ section.id }}">
 
           {%- for block in section.blocks -%}
             {%- if block.type == 'ingredient' -%}
-              <li
-                class="ing-section__card"
-                {{ block.shopify_attributes }}
-                data-ing-card
-              >
-                {%- if block.settings.name != blank -%}
-                  <p class="ing-section__card-name">{{ block.settings.name | escape }}</p>
-                {%- endif -%}
+              <li class="ing-s__card" {{ block.shopify_attributes }} data-ing-card>
+                <div class="ing-s__card-inner">
 
-                <div class="ing-section__card-media">
-                  {%- if block.settings.image != blank -%}
-                    <img
-                      src="{{ block.settings.image | image_url: width: 600 }}"
-                      alt="{{ block.settings.name | escape }}"
-                      loading="lazy"
-                      class="ing-section__card-img"
-                    >
-                  {%- else -%}
-                    <div class="ing-section__card-placeholder" aria-hidden="true">
-                      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <circle cx="32" cy="32" r="28" stroke="#c8c8c6" stroke-width="2"/>
-                        <circle cx="32" cy="32" r="18" stroke="#c8c8c6" stroke-width="1.5" stroke-dasharray="4 3"/>
-                        <circle cx="32" cy="32" r="6" fill="#c8c8c6" opacity="0.5"/>
-                      </svg>
+                  <div class="ing-s__card-front">
+                    {%- if block.settings.name != blank -%}
+                      <p class="ing-s__name">{{ block.settings.name | escape }}</p>
+                    {%- endif -%}
+                    <div class="ing-s__img-wrap">
+                      {%- if block.settings.image != blank -%}
+                        <img
+                          src="{{ block.settings.image | image_url: width: 600 }}"
+                          alt="{{ block.settings.name | escape }}"
+                          loading="lazy"
+                          class="ing-s__img"
+                        >
+                      {%- else -%}
+                        <div class="ing-s__placeholder">
+                          <svg width="56" height="56" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="32" cy="32" r="28" stroke="#c8c8c6" stroke-width="2"/>
+                            <circle cx="32" cy="32" r="18" stroke="#c8c8c6" stroke-width="1.5" stroke-dasharray="4 3"/>
+                            <circle cx="32" cy="32" r="6" fill="#c8c8c6" opacity="0.5"/>
+                          </svg>
+                        </div>
+                      {%- endif -%}
                     </div>
-                  {%- endif -%}
+                    <button class="ing-s__btn" type="button" aria-label="{{ block.settings.name | escape }}" data-toggle>+</button>
+                  </div>
 
-                  <button
-                    class="ing-section__toggle-btn"
-                    type="button"
-                    aria-expanded="false"
-                    aria-controls="ing-body-{{ section.id }}-{{ forloop.index }}"
-                    aria-label="{{ block.settings.name | escape }}"
-                    data-toggle
-                  >
-                    <span class="ing-section__toggle-icon" aria-hidden="true">+</span>
-                  </button>
+                  <div class="ing-s__card-back">
+                    {%- if block.settings.name != blank -%}
+                      <p class="ing-s__name ing-s__name--back">{{ block.settings.name | escape }}</p>
+                    {%- endif -%}
+                    {%- if block.settings.description != blank -%}
+                      <p class="ing-s__desc">{{ block.settings.description | escape }}</p>
+                    {%- endif -%}
+                    <button class="ing-s__btn ing-s__btn--x" type="button" aria-label="Cerrar" data-toggle>&times;</button>
+                  </div>
+
                 </div>
-
-                <div
-                  class="ing-section__card-body"
-                  id="ing-body-{{ section.id }}-{{ forloop.index }}"
-                  aria-hidden="true"
-                >
-                  {%- if block.settings.description != blank -%}
-                    <p class="ing-section__card-body-text">{{ block.settings.description | escape }}</p>
-                  {%- endif -%}
-                </div>
-
               </li>
             {%- endif -%}
           {%- endfor -%}
@@ -84,57 +74,45 @@
 </section>
 
 <style>
-  .ing-section {
-    background-color: #ffffff;
-    padding: 56px 20px 64px;
+  .ing-s {
+    background: #ffffff;
+    padding: 40px 20px 48px;
     box-sizing: border-box;
     width: 100%;
   }
 
-  .ing-section__container {
+  .ing-s__container {
     max-width: 1200px;
     margin: 0 auto;
   }
 
-  .ing-section__heading {
+  .ing-s__heading {
     text-align: center;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(24px, 3.5vw, 36px);
+    font-size: clamp(22px, 3vw, 34px);
     font-weight: 400;
     color: #1a1a1a;
     line-height: 1.25;
-    margin: 0 0 40px;
+    margin: 0 0 36px;
     padding: 0;
-    letter-spacing: -0.01em;
   }
 
-  .ing-section__heading em {
+  .ing-s__heading em {
     font-style: italic;
   }
 
-  .ing-section__track-wrap {
+  .ing-s__track {
     overflow-x: auto;
-    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
-    mask-image: linear-gradient(to right, black 88%, transparent 100%);
   }
 
-  .ing-section__track-wrap::-webkit-scrollbar {
+  .ing-s__track::-webkit-scrollbar {
     display: none;
   }
 
-  @media (min-width: 1024px) {
-    .ing-section__track-wrap {
-      overflow-x: visible;
-      -webkit-mask-image: none;
-      mask-image: none;
-    }
-  }
-
-  .ing-section__grid {
+  .ing-s__grid {
     display: flex;
     flex-wrap: nowrap;
     gap: 16px;
@@ -145,72 +123,113 @@
   }
 
   @media (min-width: 640px) and (max-width: 1023px) {
-    .ing-section__grid {
+    .ing-s__grid {
       flex-wrap: wrap;
     }
   }
 
   @media (min-width: 1024px) {
-    .ing-section__grid {
+    .ing-s__track {
+      overflow-x: visible;
+    }
+    .ing-s__grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       padding-bottom: 0;
     }
   }
 
-  .ing-section__card {
-    position: relative;
-    background-color: #f5f5f3;
-    border-radius: 16px;
-    overflow: hidden;
+  /* Card — perspective wrapper */
+  .ing-s__card {
     flex-shrink: 0;
     width: 68vw;
     min-width: 200px;
-    max-width: 320px;
-    display: flex;
-    flex-direction: column;
+    max-width: 300px;
+    aspect-ratio: 5 / 6;
+    perspective: 1000px;
     list-style: none;
-    box-sizing: border-box;
+    cursor: pointer;
   }
 
   @media (min-width: 640px) and (max-width: 1023px) {
-    .ing-section__card {
+    .ing-s__card {
       width: calc(50% - 8px);
-      min-width: 220px;
+      min-width: 200px;
       max-width: none;
       flex-shrink: unset;
     }
   }
 
   @media (min-width: 1024px) {
-    .ing-section__card {
-      width: auto;
+    .ing-s__card {
+      width: 100%;
       min-width: unset;
       max-width: none;
       flex-shrink: unset;
     }
   }
 
-  .ing-section__card-name {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    font-size: 14px;
+  /* Flip inner */
+  .ing-s__card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+
+  .ing-s__card.is-open .ing-s__card-inner {
+    transform: rotateY(180deg);
+  }
+
+  /* Front and back shared */
+  .ing-s__card-front,
+  .ing-s__card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #f5f5f3;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  /* Back: pre-rotated + padding for text */
+  .ing-s__card-back {
+    transform: rotateY(180deg);
+    padding: 18px 18px 52px;
+    overflow-y: auto;
+  }
+
+  /* Name */
+  .ing-s__name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
     font-weight: 500;
     color: #1a1a1a;
     line-height: 1.35;
-    padding: 14px 16px 10px;
+    padding: 14px 14px 8px;
     margin: 0;
-  }
-
-  .ing-section__card-media {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
     flex-shrink: 0;
-    background-color: #ededeb;
   }
 
-  .ing-section__card-img {
+  .ing-s__name--back {
+    padding: 0 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* Image */
+  .ing-s__img-wrap {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ing-s__img {
     display: block;
     width: 100%;
     height: 100%;
@@ -218,7 +237,7 @@
     object-position: center;
   }
 
-  .ing-section__card-placeholder {
+  .ing-s__placeholder {
     width: 100%;
     height: 100%;
     background-color: #e5e5e3;
@@ -227,7 +246,19 @@
     justify-content: center;
   }
 
-  .ing-section__toggle-btn {
+  /* Description */
+  .ing-s__desc {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.75;
+    color: #444444;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+  }
+
+  /* Toggle button */
+  .ing-s__btn {
     position: absolute;
     bottom: 12px;
     right: 12px;
@@ -238,141 +269,95 @@
     color: #ffffff;
     border: none;
     cursor: pointer;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     transition: background-color 0.2s ease, transform 0.15s ease;
-    z-index: 3;
+    z-index: 2;
     -webkit-appearance: none;
     appearance: none;
+    font-family: 'Poppins', sans-serif;
   }
 
-  .ing-section__toggle-btn:hover {
+  .ing-s__btn:hover {
     background-color: #1D9E75;
     transform: scale(1.08);
   }
 
-  .ing-section__toggle-btn:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(15, 110, 86, 0.35);
-  }
-
-  .ing-section__card.is-open .ing-section__toggle-btn {
+  .ing-s__btn--x {
     background-color: #1D9E75;
   }
 
-  .ing-section__toggle-icon {
-    font-size: 20px;
-    font-weight: 300;
-    line-height: 1;
-    display: block;
-  }
-
-  .ing-section__card-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.45s ease, padding-top 0.3s ease, padding-bottom 0.3s ease;
-    padding: 0 16px;
-    box-sizing: border-box;
-  }
-
-  .ing-section__card.is-open .ing-section__card-body {
-    max-height: 500px;
-    padding-top: 14px;
-    padding-bottom: 52px;
-  }
-
-  .ing-section__card-body-text {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    font-size: 13px;
-    line-height: 1.7;
-    color: #444444;
-    margin: 0;
-    padding: 0;
+  .ing-s__btn--x:hover {
+    background-color: #0F6E56;
   }
 </style>
 
 <script>
 (function () {
-  var sectionEl = document.getElementById('ing-section-{{ section.id }}');
-  if (!sectionEl) return;
+  var section = document.getElementById('ing-s-{{ section.id }}');
+  if (!section) return;
 
-  var grid = sectionEl.querySelector('#ing-grid-{{ section.id }}');
+  var grid = section.querySelector('#ing-s-grid-{{ section.id }}');
   if (!grid) return;
 
   var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-ing-card]'));
 
-  function closeCard(card) {
-    card.classList.remove('is-open');
-    var btn  = card.querySelector('[data-toggle]');
-    var icon = card.querySelector('.ing-section__toggle-icon');
-    var body = card.querySelector('.ing-section__card-body');
-    if (btn)  btn.setAttribute('aria-expanded', 'false');
-    if (body) body.setAttribute('aria-hidden', 'true');
-    if (icon) icon.textContent = '+';
-  }
-
-  function openCard(card) {
-    card.classList.add('is-open');
-    var btn  = card.querySelector('[data-toggle]');
-    var icon = card.querySelector('.ing-section__toggle-icon');
-    var body = card.querySelector('.ing-section__card-body');
-    if (btn)  btn.setAttribute('aria-expanded', 'true');
-    if (body) body.setAttribute('aria-hidden', 'false');
-    if (icon) icon.textContent = '\u00D7';
+  function closeAll() {
+    cards.forEach(function (c) { c.classList.remove('is-open'); });
   }
 
   cards.forEach(function (card) {
-    var btn = card.querySelector('[data-toggle]');
-    if (!btn) return;
-
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var wasOpen = card.classList.contains('is-open');
-      cards.forEach(closeCard);
-      if (!wasOpen) {
-        openCard(card);
-        if (window.innerWidth < 1024) {
-          setTimeout(function () {
-            card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-          }, 60);
+    var btns = Array.prototype.slice.call(card.querySelectorAll('[data-toggle]'));
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var wasOpen = card.classList.contains('is-open');
+        closeAll();
+        if (!wasOpen) {
+          card.classList.add('is-open');
+          if (window.innerWidth < 1024) {
+            setTimeout(function () {
+              card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            }, 60);
+          }
         }
-      }
+      });
     });
   });
 
-  sectionEl.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' || e.keyCode === 27) {
-      cards.forEach(closeCard);
-    }
+  section.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.keyCode === 27) { closeAll(); }
   });
-
 })();
 </script>
 
 {% schema %}
 {
-  "name": "Ingredientes Activos",
+  "name": "Ingredientes",
   "tag": "section",
-  "class": "ing-section-wrapper",
+  "class": "ing-s-wrapper",
   "settings": [
     {
       "type": "text",
       "id": "title_before",
-      "label": "Headline - parte inicial",
+      "label": "Titulo primera parte",
       "default": "Ingredientes con"
     },
     {
       "type": "text",
       "id": "title_italic",
-      "label": "Headline - cursiva",
+      "label": "Titulo cursiva",
       "default": "ciencia real"
     },
     {
       "type": "text",
       "id": "title_after",
-      "label": "Headline - parte final",
+      "label": "Titulo ultima parte",
       "default": "detras"
     }
   ],
@@ -390,7 +375,7 @@
           "type": "text",
           "id": "name",
           "label": "Nombre",
-          "default": "Nombre del ingrediente"
+          "default": "Ingrediente"
         },
         {
           "type": "textarea",
@@ -403,57 +388,15 @@
   ],
   "presets": [
     {
-      "name": "Ingredientes Activos",
+      "name": "Ingredientes",
       "blocks": [
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Calostro Bovino",
-            "description": "El primer alimento que una madre le da a su cria. Regula el sistema inmune desde adentro, no lo apaga como los medicamentos, lo educa. Rico en inmunoglobulinas que calman la respuesta alergica y aceleran la reparacion de la piel danada."
-          }
-        },
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Aceite de Salmon",
-            "description": "Concentrado de Omega-3 (EPA y DHA). Reduce la inflamacion, fortalece la barrera cutanea y bloquea la entrada de alergenos ambientales. Resultado visible: menos enrojecimiento, pelaje brillante."
-          }
-        },
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Omega-3",
-            "description": "Los acidos grasos antiinflamatorios mas potentes de la naturaleza. Se incorporan directamente a las celulas de la piel, mejorando su elasticidad y reduciendo la perdida de agua que provoca el picor cronico."
-          }
-        },
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Quercetina",
-            "description": "El antihistaminico que la naturaleza ya invento. Estabiliza los mastocitos que liberan histamina al detectar un alergeno, cortando el ciclo de picazon antes de que empiece, sin dejar a tu perro atontado."
-          }
-        },
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Probioticos",
-            "description": "El 70 por ciento del sistema inmune vive en el intestino. Nuestras cepas restauran el equilibrio del microbioma, reduciendo la inflamacion cutanea desde dentro y mejorando la digestion, el aliento y las heces."
-          }
-        },
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Vinagre de Sidra de Manzana",
-            "description": "Acidifica el tracto digestivo, optimiza la absorcion de todos los demas ingredientes y crea un ambiente hostil para bacterias y levaduras. Actua donde realmente importa: desde adentro."
-          }
-        },
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Hongo Reishi + Raiz de Regaliz",
-            "description": "El escudo antifungico y antiinflamatorio natural. El Reishi combate las infecciones recurrentes de oidos y patas. La Raiz de Regaliz calma la irritacion de piel y mucosas de forma inmediata."
-          }
-        }
+        {"type": "ingredient", "settings": {"name": "Calostro Bovino", "description": "El primer alimento que da una madre a su cria. Regula el sistema inmune desde adentro."}},
+        {"type": "ingredient", "settings": {"name": "Aceite de Salmon", "description": "Concentrado de Omega-3 EPA y DHA. Reduce la inflamacion y fortalece la barrera cutanea."}},
+        {"type": "ingredient", "settings": {"name": "Omega-3", "description": "Los acidos grasos antiinflamatorios mas potentes. Mejoran la elasticidad de la piel."}},
+        {"type": "ingredient", "settings": {"name": "Quercetina", "description": "El antihistaminico que la naturaleza ya invento. Corta el ciclo de picazon."}},
+        {"type": "ingredient", "settings": {"name": "Probioticos", "description": "El 70 por ciento del sistema inmune vive en el intestino. Restauran el microbioma."}},
+        {"type": "ingredient", "settings": {"name": "Vinagre de Sidra de Manzana", "description": "Acidifica el tracto digestivo y crea un ambiente hostil para bacterias y levaduras."}},
+        {"type": "ingredient", "settings": {"name": "Hongo Reishi + Raiz de Regaliz", "description": "Escudo antifungico y antiinflamatorio natural. Combate infecciones recurrentes."}}
       ]
     }
   ],
