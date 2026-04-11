@@ -1,15 +1,6 @@
-{% comment %}
-  Section: ingredients-section.liquid
-  Sección personalizada de ingredientes activos para página de producto.
-  Compatible con Shopify OS 2.0 / Dawn y temas modernos.
-  Todo inline: HTML + CSS + JS vanilla. Sin dependencias externas.
-{% endcomment %}
-
-{%- liquid
-  assign t_before = section.settings.title_before
-  assign t_italic  = section.settings.title_italic
-  assign t_after   = section.settings.title_after
--%}
+{%- assign t_before = section.settings.title_before -%}
+{%- assign t_italic = section.settings.title_italic -%}
+{%- assign t_after = section.settings.title_after -%}
 
 <section
   class="ing-section"
@@ -75,7 +66,6 @@
                   class="ing-section__card-body"
                   id="ing-body-{{ section.id }}-{{ forloop.index }}"
                   aria-hidden="true"
-                  role="region"
                 >
                   {%- if block.settings.description != blank -%}
                     <p class="ing-section__card-body-text">{{ block.settings.description | escape }}</p>
@@ -94,11 +84,6 @@
 </section>
 
 <style>
-  /* ============================================================
-     INGREDIENTS SECTION — Scoped styles
-     Prefix: .ing-section__ (no colisiona con el tema)
-     ============================================================ */
-
   .ing-section {
     background-color: #ffffff;
     padding: 56px 20px 64px;
@@ -111,7 +96,6 @@
     margin: 0 auto;
   }
 
-  /* --- Heading --- */
   .ing-section__heading {
     text-align: center;
     font-family: Georgia, 'Times New Roman', serif;
@@ -128,14 +112,12 @@
     font-style: italic;
   }
 
-  /* --- Track wrapper: scroll on mobile/tablet --- */
   .ing-section__track-wrap {
     overflow-x: auto;
     overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* subtle right fade to hint more content */
     -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
     mask-image: linear-gradient(to right, black 88%, transparent 100%);
   }
@@ -144,7 +126,6 @@
     display: none;
   }
 
-  /* Desktop: no scroll hint needed */
   @media (min-width: 1024px) {
     .ing-section__track-wrap {
       overflow-x: visible;
@@ -153,7 +134,6 @@
     }
   }
 
-  /* --- Grid --- */
   .ing-section__grid {
     display: flex;
     flex-wrap: nowrap;
@@ -161,34 +141,29 @@
     list-style: none;
     margin: 0;
     padding: 0 0 8px;
-    align-items: flex-start; /* cards grow independently */
+    align-items: flex-start;
   }
 
-  /* Tablet: 2 columns, wrap */
   @media (min-width: 640px) and (max-width: 1023px) {
     .ing-section__grid {
       flex-wrap: wrap;
     }
   }
 
-  /* Desktop: CSS Grid, 4 columns */
   @media (min-width: 1024px) {
     .ing-section__grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      flex-wrap: unset;
       padding-bottom: 0;
     }
   }
 
-  /* --- Card --- */
   .ing-section__card {
     position: relative;
     background-color: #f5f5f3;
     border-radius: 16px;
     overflow: hidden;
     flex-shrink: 0;
-    /* Mobile: show ~1.5 cards */
     width: 68vw;
     min-width: 200px;
     max-width: 320px;
@@ -198,7 +173,6 @@
     box-sizing: border-box;
   }
 
-  /* Tablet: 2 per row */
   @media (min-width: 640px) and (max-width: 1023px) {
     .ing-section__card {
       width: calc(50% - 8px);
@@ -208,7 +182,6 @@
     }
   }
 
-  /* Desktop: Grid handles sizing */
   @media (min-width: 1024px) {
     .ing-section__card {
       width: auto;
@@ -218,7 +191,6 @@
     }
   }
 
-  /* --- Ingredient name --- */
   .ing-section__card-name {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     font-size: 14px;
@@ -227,15 +199,11 @@
     line-height: 1.35;
     padding: 14px 16px 10px;
     margin: 0;
-    position: relative;
-    z-index: 1;
   }
 
-  /* --- Image wrapper --- */
   .ing-section__card-media {
     position: relative;
     width: 100%;
-    /* Square aspect ratio — same visual proportion as screenshots */
     aspect-ratio: 1 / 1;
     overflow: hidden;
     flex-shrink: 0;
@@ -259,7 +227,6 @@
     justify-content: center;
   }
 
-  /* --- Toggle button (+/×) --- */
   .ing-section__toggle-btn {
     position: absolute;
     bottom: 12px;
@@ -279,8 +246,6 @@
     z-index: 3;
     -webkit-appearance: none;
     appearance: none;
-    line-height: 1;
-    flex-shrink: 0;
   }
 
   .ing-section__toggle-btn:hover {
@@ -293,39 +258,29 @@
     box-shadow: 0 0 0 3px rgba(15, 110, 86, 0.35);
   }
 
-  /* Open state: button becomes × with secondary green */
   .ing-section__card.is-open .ing-section__toggle-btn {
     background-color: #1D9E75;
   }
 
   .ing-section__toggle-icon {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
+    font-size: 20px;
+    font-weight: 300;
     line-height: 1;
     display: block;
-    width: 18px;
-    height: 18px;
-    text-align: center;
-    position: relative;
-    top: -0.5px;
   }
 
-  /* --- Expandable description body --- */
   .ing-section__card-body {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-                padding-top 0.3s ease,
-                padding-bottom 0.3s ease;
+    transition: max-height 0.45s ease, padding-top 0.3s ease, padding-bottom 0.3s ease;
     padding: 0 16px;
     box-sizing: border-box;
   }
 
   .ing-section__card.is-open .ing-section__card-body {
-    max-height: 500px;   /* tall enough for any description */
+    max-height: 500px;
     padding-top: 14px;
-    padding-bottom: 52px; /* breathing room above absolute button zone */
+    padding-bottom: 52px;
   }
 
   .ing-section__card-body-text {
@@ -340,17 +295,14 @@
 
 <script>
 (function () {
-  'use strict';
+  var sectionEl = document.getElementById('ing-section-{{ section.id }}');
+  if (!sectionEl) return;
 
-  var section = document.getElementById('ing-section-{{ section.id }}');
-  if (!section) return;
-
-  var grid = section.querySelector('#ing-grid-{{ section.id }}');
+  var grid = sectionEl.querySelector('#ing-grid-{{ section.id }}');
   if (!grid) return;
 
   var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-ing-card]'));
 
-  /* ---- Helpers ---- */
   function closeCard(card) {
     card.classList.remove('is-open');
     var btn  = card.querySelector('[data-toggle]');
@@ -368,10 +320,9 @@
     var body = card.querySelector('.ing-section__card-body');
     if (btn)  btn.setAttribute('aria-expanded', 'true');
     if (body) body.setAttribute('aria-hidden', 'false');
-    if (icon) icon.textContent = '\u00D7'; /* × multiplication sign */
+    if (icon) icon.textContent = '\u00D7';
   }
 
-  /* ---- Wire up each card ---- */
   cards.forEach(function (card) {
     var btn = card.querySelector('[data-toggle]');
     if (!btn) return;
@@ -379,15 +330,9 @@
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
       var wasOpen = card.classList.contains('is-open');
-
-      /* Close all cards first */
       cards.forEach(closeCard);
-
-      /* If this card was closed, now open it */
       if (!wasOpen) {
         openCard(card);
-
-        /* On mobile, softly scroll the card into view (horizontal) */
         if (window.innerWidth < 1024) {
           setTimeout(function () {
             card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
@@ -397,8 +342,7 @@
     });
   });
 
-  /* ---- Close on Escape ---- */
-  section.addEventListener('keydown', function (e) {
+  sectionEl.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' || e.keyCode === 27) {
       cards.forEach(closeCard);
     }
@@ -414,26 +358,22 @@
   "class": "ing-section-wrapper",
   "settings": [
     {
-      "type": "paragraph",
-      "content": "Configura el headline en tres partes: texto normal, palabra(s) en cursiva y texto final."
-    },
-    {
       "type": "text",
       "id": "title_before",
-      "label": "Headline — parte inicial",
+      "label": "Headline - parte inicial",
       "default": "Ingredientes con"
     },
     {
       "type": "text",
       "id": "title_italic",
-      "label": "Headline — palabra(s) en cursiva",
+      "label": "Headline - cursiva",
       "default": "ciencia real"
     },
     {
       "type": "text",
       "id": "title_after",
-      "label": "Headline — parte final",
-      "default": "detrás"
+      "label": "Headline - parte final",
+      "default": "detras"
     }
   ],
   "blocks": [
@@ -444,19 +384,19 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Imagen del ingrediente"
+          "label": "Imagen"
         },
         {
           "type": "text",
           "id": "name",
-          "label": "Nombre del ingrediente",
+          "label": "Nombre",
           "default": "Nombre del ingrediente"
         },
         {
           "type": "textarea",
           "id": "description",
-          "label": "Descripción",
-          "default": "Descripción del ingrediente y sus beneficios."
+          "label": "Descripcion",
+          "default": "Descripcion del ingrediente."
         }
       ]
     }
@@ -464,59 +404,54 @@
   "presets": [
     {
       "name": "Ingredientes Activos",
-      "settings": {
-        "title_before": "Ingredientes con",
-        "title_italic": "ciencia real",
-        "title_after": "detrás"
-      },
       "blocks": [
         {
           "type": "ingredient",
           "settings": {
             "name": "Calostro Bovino",
-            "description": "El primer alimento que una madre le da a su cría. Regula el sistema inmune desde adentro — no lo apaga como los medicamentos, lo educa. Rico en inmunoglobulinas que calman la respuesta alérgica y aceleran la reparación de la piel dañada."
+            "description": "El primer alimento que una madre le da a su cria. Regula el sistema inmune desde adentro, no lo apaga como los medicamentos, lo educa. Rico en inmunoglobulinas que calman la respuesta alergica y aceleran la reparacion de la piel danada."
           }
         },
         {
           "type": "ingredient",
           "settings": {
-            "name": "Aceite de Salmón",
-            "description": "Concentrado de Omega-3 (EPA y DHA). Reduce la inflamación, fortalece la barrera cutánea y bloquea la entrada de alérgenos ambientales. Resultado visible: menos enrojecimiento, pelaje brillante."
+            "name": "Aceite de Salmon",
+            "description": "Concentrado de Omega-3 (EPA y DHA). Reduce la inflamacion, fortalece la barrera cutanea y bloquea la entrada de alergenos ambientales. Resultado visible: menos enrojecimiento, pelaje brillante."
           }
         },
         {
           "type": "ingredient",
           "settings": {
             "name": "Omega-3",
-            "description": "Los ácidos grasos antiinflamatorios más potentes de la naturaleza. Se incorporan directamente a las células de la piel, mejorando su elasticidad y reduciendo la pérdida de agua que provoca el picor crónico."
+            "description": "Los acidos grasos antiinflamatorios mas potentes de la naturaleza. Se incorporan directamente a las celulas de la piel, mejorando su elasticidad y reduciendo la perdida de agua que provoca el picor cronico."
           }
         },
         {
           "type": "ingredient",
           "settings": {
             "name": "Quercetina",
-            "description": "El antihistamínico que la naturaleza ya inventó. Estabiliza los mastocitos que liberan histamina al detectar un alérgeno — cortando el ciclo de picazón antes de que empiece, sin dejar a tu perro atontado."
+            "description": "El antihistaminico que la naturaleza ya invento. Estabiliza los mastocitos que liberan histamina al detectar un alergeno, cortando el ciclo de picazon antes de que empiece, sin dejar a tu perro atontado."
           }
         },
         {
           "type": "ingredient",
           "settings": {
-            "name": "Probióticos",
-            "description": "El 70% del sistema inmune vive en el intestino. Nuestras cepas restauran el equilibrio del microbioma, reduciendo la inflamación cutánea desde dentro y mejorando la digestión, el aliento y las heces."
+            "name": "Probioticos",
+            "description": "El 70 por ciento del sistema inmune vive en el intestino. Nuestras cepas restauran el equilibrio del microbioma, reduciendo la inflamacion cutanea desde dentro y mejorando la digestion, el aliento y las heces."
           }
         },
         {
           "type": "ingredient",
           "settings": {
             "name": "Vinagre de Sidra de Manzana",
-            "description": "Acidifica el tracto digestivo, optimiza la absorción de todos los demás ingredientes y crea un ambiente hostil para bacterias y levaduras. Actúa donde realmente importa: desde adentro."
+            "description": "Acidifica el tracto digestivo, optimiza la absorcion de todos los demas ingredientes y crea un ambiente hostil para bacterias y levaduras. Actua donde realmente importa: desde adentro."
           }
         },
         {
           "type": "ingredient",
           "settings": {
-            "name": "Hongo Reishi + Raíz de Regaliz",
-            "description": "El escudo antifúngico y antiinflamatorio natural. El Reishi combate las infecciones recurrentes de oídos y patas. La Raíz de Regaliz calma la irritación de piel y mucosas de forma inmediata — el alivio que notas hoy mientras el resto trabaja a fondo."
+            "name": "Hongo Reishi + Raiz de Regaliz",
+            "description": "El escudo antifungico y antiinflamatorio natural. El Reishi combate las infecciones recurrentes de oidos y patas. La Raiz de Regaliz calma la irritacion de piel y mucosas de forma inmediata."
           }
         }
       ]
