@@ -1,0 +1,531 @@
+{% comment %}
+  Section: ingredients-section.liquid
+  Sección personalizada de ingredientes activos para página de producto.
+  Compatible con Shopify OS 2.0 / Dawn y temas modernos.
+  Todo inline: HTML + CSS + JS vanilla. Sin dependencias externas.
+{% endcomment %}
+
+{%- liquid
+  assign t_before = section.settings.title_before
+  assign t_italic  = section.settings.title_italic
+  assign t_after   = section.settings.title_after
+-%}
+
+<section
+  class="ing-section"
+  id="ing-section-{{ section.id }}"
+  aria-labelledby="ing-heading-{{ section.id }}"
+>
+  <div class="ing-section__container">
+
+    {%- if t_before != blank or t_italic != blank or t_after != blank -%}
+      <h2 class="ing-section__heading" id="ing-heading-{{ section.id }}">
+        {%- if t_before != blank -%}{{ t_before | escape }}{%- endif -%}
+        {%- if t_italic != blank -%} <em>{{ t_italic | escape }}</em>{%- endif -%}
+        {%- if t_after != blank -%} {{ t_after | escape }}{%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="ing-section__track-wrap">
+        <ul class="ing-section__grid" id="ing-grid-{{ section.id }}">
+
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'ingredient' -%}
+              <li
+                class="ing-section__card"
+                {{ block.shopify_attributes }}
+                data-ing-card
+              >
+                {%- if block.settings.name != blank -%}
+                  <p class="ing-section__card-name">{{ block.settings.name | escape }}</p>
+                {%- endif -%}
+
+                <div class="ing-section__card-media">
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 600
+                      | image_tag:
+                        loading: 'lazy',
+                        alt: block.settings.name,
+                        class: 'ing-section__card-img',
+                        widths: '300, 400, 600',
+                        sizes: '(min-width: 1024px) 25vw, (min-width: 640px) 45vw, 68vw'
+                    }}
+                  {%- else -%}
+                    <div class="ing-section__card-placeholder" aria-hidden="true">
+                      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="32" cy="32" r="28" stroke="#c8c8c6" stroke-width="2"/>
+                        <circle cx="32" cy="32" r="18" stroke="#c8c8c6" stroke-width="1.5" stroke-dasharray="4 3"/>
+                        <circle cx="32" cy="32" r="6" fill="#c8c8c6" opacity="0.5"/>
+                      </svg>
+                    </div>
+                  {%- endif -%}
+
+                  <button
+                    class="ing-section__toggle-btn"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="ing-body-{{ section.id }}-{{ forloop.index }}"
+                    aria-label="{{ block.settings.name | escape | append: ' — ver descripción' }}"
+                    data-toggle
+                  >
+                    <span class="ing-section__toggle-icon" aria-hidden="true">+</span>
+                  </button>
+                </div>
+
+                <div
+                  class="ing-section__card-body"
+                  id="ing-body-{{ section.id }}-{{ forloop.index }}"
+                  aria-hidden="true"
+                  role="region"
+                >
+                  {%- if block.settings.description != blank -%}
+                    <p class="ing-section__card-body-text">{{ block.settings.description | escape }}</p>
+                  {%- endif -%}
+                </div>
+
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+
+        </ul>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  /* ============================================================
+     INGREDIENTS SECTION — Scoped styles
+     Prefix: .ing-section__ (no colisiona con el tema)
+     ============================================================ */
+
+  .ing-section {
+    background-color: #ffffff;
+    padding: 56px 20px 64px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .ing-section__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* --- Heading --- */
+  .ing-section__heading {
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 400;
+    color: #1a1a1a;
+    line-height: 1.25;
+    margin: 0 0 40px;
+    padding: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .ing-section__heading em {
+    font-style: italic;
+  }
+
+  /* --- Track wrapper: scroll on mobile/tablet --- */
+  .ing-section__track-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* subtle right fade to hint more content */
+    -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
+    mask-image: linear-gradient(to right, black 88%, transparent 100%);
+  }
+
+  .ing-section__track-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Desktop: no scroll hint needed */
+  @media (min-width: 1024px) {
+    .ing-section__track-wrap {
+      overflow-x: visible;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+
+  /* --- Grid --- */
+  .ing-section__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 8px;
+    align-items: flex-start; /* cards grow independently */
+  }
+
+  /* Tablet: 2 columns, wrap */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .ing-section__grid {
+      flex-wrap: wrap;
+    }
+  }
+
+  /* Desktop: CSS Grid, 4 columns */
+  @media (min-width: 1024px) {
+    .ing-section__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      flex-wrap: unset;
+      padding-bottom: 0;
+    }
+  }
+
+  /* --- Card --- */
+  .ing-section__card {
+    position: relative;
+    background-color: #f5f5f3;
+    border-radius: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+    /* Mobile: show ~1.5 cards */
+    width: 68vw;
+    min-width: 200px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    box-sizing: border-box;
+  }
+
+  /* Tablet: 2 per row */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .ing-section__card {
+      width: calc(50% - 8px);
+      min-width: 220px;
+      max-width: none;
+      flex-shrink: unset;
+    }
+  }
+
+  /* Desktop: Grid handles sizing */
+  @media (min-width: 1024px) {
+    .ing-section__card {
+      width: auto;
+      min-width: unset;
+      max-width: none;
+      flex-shrink: unset;
+    }
+  }
+
+  /* --- Ingredient name --- */
+  .ing-section__card-name {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    line-height: 1.35;
+    padding: 14px 16px 10px;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* --- Image wrapper --- */
+  .ing-section__card-media {
+    position: relative;
+    width: 100%;
+    /* Square aspect ratio — same visual proportion as screenshots */
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: #ededeb;
+  }
+
+  .ing-section__card-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .ing-section__card-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #e5e5e3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* --- Toggle button (+/×) --- */
+  .ing-section__toggle-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #0F6E56;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    z-index: 3;
+    -webkit-appearance: none;
+    appearance: none;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .ing-section__toggle-btn:hover {
+    background-color: #1D9E75;
+    transform: scale(1.08);
+  }
+
+  .ing-section__toggle-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(15, 110, 86, 0.35);
+  }
+
+  /* Open state: button becomes × with secondary green */
+  .ing-section__card.is-open .ing-section__toggle-btn {
+    background-color: #1D9E75;
+  }
+
+  .ing-section__toggle-icon {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+    display: block;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    position: relative;
+    top: -0.5px;
+  }
+
+  /* --- Expandable description body --- */
+  .ing-section__card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                padding-top 0.3s ease,
+                padding-bottom 0.3s ease;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  .ing-section__card.is-open .ing-section__card-body {
+    max-height: 500px;   /* tall enough for any description */
+    padding-top: 14px;
+    padding-bottom: 52px; /* breathing room above absolute button zone */
+  }
+
+  .ing-section__card-body-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #444444;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  var section = document.getElementById('ing-section-{{ section.id }}');
+  if (!section) return;
+
+  var grid = section.querySelector('#ing-grid-{{ section.id }}');
+  if (!grid) return;
+
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-ing-card]'));
+
+  /* ---- Helpers ---- */
+  function closeCard(card) {
+    card.classList.remove('is-open');
+    var btn  = card.querySelector('[data-toggle]');
+    var icon = card.querySelector('.ing-section__toggle-icon');
+    var body = card.querySelector('.ing-section__card-body');
+    if (btn)  btn.setAttribute('aria-expanded', 'false');
+    if (body) body.setAttribute('aria-hidden', 'true');
+    if (icon) icon.textContent = '+';
+  }
+
+  function openCard(card) {
+    card.classList.add('is-open');
+    var btn  = card.querySelector('[data-toggle]');
+    var icon = card.querySelector('.ing-section__toggle-icon');
+    var body = card.querySelector('.ing-section__card-body');
+    if (btn)  btn.setAttribute('aria-expanded', 'true');
+    if (body) body.setAttribute('aria-hidden', 'false');
+    if (icon) icon.textContent = '\u00D7'; /* × multiplication sign */
+  }
+
+  /* ---- Wire up each card ---- */
+  cards.forEach(function (card) {
+    var btn = card.querySelector('[data-toggle]');
+    if (!btn) return;
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var wasOpen = card.classList.contains('is-open');
+
+      /* Close all cards first */
+      cards.forEach(closeCard);
+
+      /* If this card was closed, now open it */
+      if (!wasOpen) {
+        openCard(card);
+
+        /* On mobile, softly scroll the card into view (horizontal) */
+        if (window.innerWidth < 1024) {
+          setTimeout(function () {
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+          }, 60);
+        }
+      }
+    });
+  });
+
+  /* ---- Close on Escape ---- */
+  section.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.keyCode === 27) {
+      cards.forEach(closeCard);
+    }
+  });
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Ingredientes Activos",
+  "tag": "section",
+  "class": "ing-section-wrapper",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Configura el headline en tres partes: texto normal, palabra(s) en cursiva y texto final."
+    },
+    {
+      "type": "text",
+      "id": "title_before",
+      "label": "Headline — parte inicial",
+      "default": "Ingredientes con"
+    },
+    {
+      "type": "text",
+      "id": "title_italic",
+      "label": "Headline — palabra(s) en cursiva",
+      "default": "ciencia real"
+    },
+    {
+      "type": "text",
+      "id": "title_after",
+      "label": "Headline — parte final",
+      "default": "detrás"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingrediente",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen del ingrediente"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre del ingrediente",
+          "default": "Nombre del ingrediente"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descripción",
+          "default": "Descripción del ingrediente y sus beneficios."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ingredientes Activos",
+      "settings": {
+        "title_before": "Ingredientes con",
+        "title_italic": "ciencia real",
+        "title_after": "detrás"
+      },
+      "blocks": [
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Calostro Bovino",
+            "description": "El primer alimento que una madre le da a su cría. Regula el sistema inmune desde adentro — no lo apaga como los medicamentos, lo educa. Rico en inmunoglobulinas que calman la respuesta alérgica y aceleran la reparación de la piel dañada."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Aceite de Salmón",
+            "description": "Concentrado de Omega-3 (EPA y DHA). Reduce la inflamación, fortalece la barrera cutánea y bloquea la entrada de alérgenos ambientales. Resultado visible: menos enrojecimiento, pelaje brillante."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Omega-3",
+            "description": "Los ácidos grasos antiinflamatorios más potentes de la naturaleza. Se incorporan directamente a las células de la piel, mejorando su elasticidad y reduciendo la pérdida de agua que provoca el picor crónico."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Quercetina",
+            "description": "El antihistamínico que la naturaleza ya inventó. Estabiliza los mastocitos que liberan histamina al detectar un alérgeno — cortando el ciclo de picazón antes de que empiece, sin dejar a tu perro atontado."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Probióticos",
+            "description": "El 70% del sistema inmune vive en el intestino. Nuestras cepas restauran el equilibrio del microbioma, reduciendo la inflamación cutánea desde dentro y mejorando la digestión, el aliento y las heces."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vinagre de Sidra de Manzana",
+            "description": "Acidifica el tracto digestivo, optimiza la absorción de todos los demás ingredientes y crea un ambiente hostil para bacterias y levaduras. Actúa donde realmente importa: desde adentro."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Hongo Reishi + Raíz de Regaliz",
+            "description": "El escudo antifúngico y antiinflamatorio natural. El Reishi combate las infecciones recurrentes de oídos y patas. La Raíz de Regaliz calma la irritación de piel y mucosas de forma inmediata — el alivio que notas hoy mientras el resto trabaja a fondo."
+          }
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10
+}
+{% endschema %}
