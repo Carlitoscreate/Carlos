@@ -1,0 +1,583 @@
+{% comment %} sections/section-vet-authority.liquid {% endcomment %}
+{% comment %} Codificación: UTF-8 {% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+  #vet-authority-{{ section.id }},
+  #vet-authority-{{ section.id }} * {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  #vet-authority-{{ section.id }} {
+    background-color: {{ section.settings.section_bg }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .va-{{ section.id }}__container {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Eyebrow ---------- */
+  .va-{{ section.id }}__eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: {{ section.settings.eyebrow_color }};
+    margin-bottom: 14px;
+  }
+
+  /* ---------- Headline ---------- */
+  .va-{{ section.id }}__headline {
+    font-size: clamp(26px, 3.8vw, 42px);
+    font-weight: 600;
+    line-height: 1.2;
+    color: {{ section.settings.headline_color }};
+    margin-bottom: 16px;
+  }
+
+  .va-{{ section.id }}__headline em {
+    font-style: italic;
+    font-weight: 400;
+    display: block;
+  }
+
+  /* ---------- Subheadline ---------- */
+  .va-{{ section.id }}__subheadline {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: {{ section.settings.subheadline_color }};
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+
+  /* ---------- Card ---------- */
+  .va-{{ section.id }}__card {
+    display: flex;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.07);
+    margin-bottom: 28px;
+  }
+
+  /* Left: quote column */
+  .va-{{ section.id }}__quote-col {
+    flex: 1 1 56%;
+    background: {{ section.settings.card_left_bg }};
+    padding: 48px 48px 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* Right: photo column */
+  .va-{{ section.id }}__photo-col {
+    flex: 1 1 44%;
+    background: {{ section.settings.card_right_bg }};
+    min-height: 400px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .va-{{ section.id }}__photo-col img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  /* ---------- Badge ---------- */
+  .va-{{ section.id }}__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: {{ section.settings.badge_bg }};
+    color: {{ section.settings.badge_color }};
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 6px 14px 6px 8px;
+    border-radius: 100px;
+    line-height: 1;
+    width: fit-content;
+  }
+
+  .va-{{ section.id }}__badge svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Quote ---------- */
+  .va-{{ section.id }}__quote {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.8;
+    color: {{ section.settings.quote_color }};
+    flex: 1;
+  }
+
+  /* ---------- Doctor ---------- */
+  .va-{{ section.id }}__doctor-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: {{ section.settings.doctor_name_color }};
+    margin-bottom: 5px;
+  }
+
+  .va-{{ section.id }}__doctor-name svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .va-{{ section.id }}__doctor-title {
+    font-size: 11px;
+    font-weight: 400;
+    color: {{ section.settings.doctor_title_color }};
+    line-height: 1.5;
+  }
+
+  /* ---------- Pills ---------- */
+  .va-{{ section.id }}__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .va-{{ section.id }}__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px 10px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .va-{{ section.id }}__pill svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 767px) {
+    #vet-authority-{{ section.id }} {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .va-{{ section.id }}__card {
+      flex-direction: column;
+    }
+
+    .va-{{ section.id }}__quote-col {
+      padding: 32px 24px 28px;
+      gap: 20px;
+    }
+
+    .va-{{ section.id }}__photo-col {
+      flex: none;
+      width: 100%;
+      min-height: 300px;
+    }
+
+    .va-{{ section.id }}__pills {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .va-{{ section.id }}__pill {
+      white-space: normal;
+    }
+  }
+</style>
+
+<section id="vet-authority-{{ section.id }}">
+  <div class="va-{{ section.id }}__container">
+
+    {%- unless section.settings.eyebrow == blank -%}
+      <p class="va-{{ section.id }}__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endunless -%}
+
+    <h2 class="va-{{ section.id }}__headline">
+      {{- section.settings.headline_line1 -}}
+      <em>{{- section.settings.headline_line2 -}}</em>
+    </h2>
+
+    {%- unless section.settings.subheadline == blank -%}
+      <p class="va-{{ section.id }}__subheadline">{{ section.settings.subheadline }}</p>
+    {%- endunless -%}
+
+    <div class="va-{{ section.id }}__card">
+
+      <!-- Columna izquierda: cita -->
+      <div class="va-{{ section.id }}__quote-col">
+
+        <!-- Badge verificado -->
+        <div class="va-{{ section.id }}__badge">
+          <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="11" cy="11" r="11" fill="{{ section.settings.badge_check_color }}"/>
+            <path d="M6.5 11.5L9.5 14.5L15.5 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{ section.settings.badge_text }}
+        </div>
+
+        <!-- Cita -->
+        <blockquote class="va-{{ section.id }}__quote">
+          &#8220;{{ section.settings.quote_text }}&#8221;
+        </blockquote>
+
+        <!-- Info del veterinario -->
+        <div>
+          <p class="va-{{ section.id }}__doctor-name">
+            {{ section.settings.doctor_name }}
+            <!-- Badge verificado azul junto al nombre -->
+            <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="11" cy="11" r="11" fill="#1877F2"/>
+              <path d="M6.5 11.5L9.5 14.5L15.5 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </p>
+          <p class="va-{{ section.id }}__doctor-title">{{ section.settings.doctor_title }}</p>
+        </div>
+
+      </div>
+
+      <!-- Columna derecha: foto -->
+      <div class="va-{{ section.id }}__photo-col">
+        {%- if section.settings.doctor_image != blank -%}
+          <img
+            src="{{ section.settings.doctor_image | image_url: width: 900 }}"
+            alt="{{ section.settings.doctor_name | escape }}"
+            loading="lazy"
+            width="900"
+          >
+        {%- endif -%}
+      </div>
+
+    </div>
+
+    <!-- Trust Pills -->
+    {%- if section.blocks.size > 0 -%}
+      <div class="va-{{ section.id }}__pills">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'trust_pill' -%}
+            <div
+              class="va-{{ section.id }}__pill"
+              style="background-color: {{ block.settings.pill_bg }}; color: {{ block.settings.pill_text_color }};"
+              {{ block.shopify_attributes }}
+            >
+              {%- case block.settings.icon -%}
+                {%- when 'leaf' -%}
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M4.5 16C4.5 16 5 9.5 10.5 6.5C16 3.5 17.5 3 17.5 3C17.5 3 17.5 5.5 14.5 9C11.5 12.5 4.5 16 4.5 16Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4.5 16L9.5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                {%- when 'shield-check' -%}
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 2L3 5.5V10.5C3 14.3 6.2 17.6 10 18.5C13.8 17.6 17 14.3 17 10.5V5.5L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 10.5L9 12.5L13 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {%- when 'ban' -%}
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M5.8 5.8L14.2 14.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                {%- when 'beaker' -%}
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M7.5 2H12.5M8 2V8.5L4.5 15C4 16 4.5 17.5 6.5 17.5H13.5C15.5 17.5 16 16 15.5 15L12 8.5V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5 13H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                {%- when 'star' -%}
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 2L12.4 7.5H18L13.5 11L15.3 17L10 13.5L4.7 17L6.5 11L2 7.5H7.6L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {%- else -%}
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M7 10.5L9.5 13L13.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+              {%- endcase -%}
+              {{ block.settings.pill_text }}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Vet Authority",
+  "tag": "section",
+  "class": "section-vet-authority",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Diseno general"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Fondo de la seccion",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espaciado superior",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espaciado inferior",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Respaldo cientifico"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Color eyebrow",
+      "default": "#666666"
+    },
+    {
+      "type": "text",
+      "id": "headline_line1",
+      "label": "Titulo linea 1",
+      "default": "Avalado por veterinarios que"
+    },
+    {
+      "type": "text",
+      "id": "headline_line2",
+      "label": "Titulo linea 2 (cursiva, peso 400)",
+      "default": "creen en sanar desde la raiz"
+    },
+    {
+      "type": "color",
+      "id": "headline_color",
+      "label": "Color del titulo",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "textarea",
+      "id": "subheadline",
+      "label": "Subtitulo",
+      "default": "No inventamos soluciones. Aplicamos lo que la ciencia ya sabe sobre el sistema inmune canino."
+    },
+    {
+      "type": "color",
+      "id": "subheadline_color",
+      "label": "Color del subtitulo",
+      "default": "#555555"
+    },
+    {
+      "type": "header",
+      "content": "Tarjeta"
+    },
+    {
+      "type": "color",
+      "id": "card_left_bg",
+      "label": "Fondo columna izquierda",
+      "default": "#f9f9f7"
+    },
+    {
+      "type": "color",
+      "id": "card_right_bg",
+      "label": "Fondo columna derecha (foto)",
+      "default": "#f0ede8"
+    },
+    {
+      "type": "header",
+      "content": "Badge verificado"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Texto del badge",
+      "default": "Consultor veterinario verificado"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Fondo del badge",
+      "default": "#e8f5e9"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "Color del texto del badge",
+      "default": "#2e7d32"
+    },
+    {
+      "type": "color",
+      "id": "badge_check_color",
+      "label": "Color del icono check",
+      "default": "#2e7d32"
+    },
+    {
+      "type": "header",
+      "content": "Cita"
+    },
+    {
+      "type": "textarea",
+      "id": "quote_text",
+      "label": "Texto de la cita",
+      "default": "El enfoque de PetLieve no tapa el sintoma — reeduca el sistema inmune desde la raiz. Sus ingredientes estan respaldados por investigacion real. Por eso lo recomiendo a mis clientes."
+    },
+    {
+      "type": "color",
+      "id": "quote_color",
+      "label": "Color de la cita",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Veterinario"
+    },
+    {
+      "type": "text",
+      "id": "doctor_name",
+      "label": "Nombre del veterinario",
+      "default": "Dr. Martinez"
+    },
+    {
+      "type": "color",
+      "id": "doctor_name_color",
+      "label": "Color del nombre",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "text",
+      "id": "doctor_title",
+      "label": "Cargo",
+      "default": "Medicina Veterinaria · Consultor de PetLieve"
+    },
+    {
+      "type": "color",
+      "id": "doctor_title_color",
+      "label": "Color del cargo",
+      "default": "#888888"
+    },
+    {
+      "type": "image_picker",
+      "id": "doctor_image",
+      "label": "Foto del veterinario"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_pill",
+      "name": "Trust Pill",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "leaf",         "label": "Hoja" },
+            { "value": "shield-check", "label": "Escudo con palomita" },
+            { "value": "ban",          "label": "Prohibicion" },
+            { "value": "beaker",       "label": "Tubo de ensayo" },
+            { "value": "star",         "label": "Estrella" },
+            { "value": "check",        "label": "Palomita en circulo" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "pill_text",
+          "label": "Texto",
+          "default": "Texto de la pill"
+        },
+        {
+          "type": "color",
+          "id": "pill_bg",
+          "label": "Color de fondo",
+          "default": "#EAF3DE"
+        },
+        {
+          "type": "color",
+          "id": "pill_text_color",
+          "label": "Color del texto e icono",
+          "default": "#3B6D11"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vet Authority",
+      "blocks": [
+        {
+          "type": "trust_pill",
+          "settings": {
+            "icon": "leaf",
+            "pill_text": "7 ingredientes con respaldo cientifico",
+            "pill_bg": "#EAF3DE",
+            "pill_text_color": "#3B6D11"
+          }
+        },
+        {
+          "type": "trust_pill",
+          "settings": {
+            "icon": "shield-check",
+            "pill_text": "Formula revisada por veterinarios DVM",
+            "pill_bg": "#E6F1FB",
+            "pill_text_color": "#185FA5"
+          }
+        },
+        {
+          "type": "trust_pill",
+          "settings": {
+            "icon": "ban",
+            "pill_text": "Sin esteroides ni efectos secundarios",
+            "pill_bg": "#FAEEDA",
+            "pill_text_color": "#854F0B"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
