@@ -11,13 +11,15 @@
     background-color: {{ section.settings.section_bg }};
     padding: {{ section.settings.padding_top }}px 24px {{ section.settings.padding_bottom }}px;
     font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 
-  #vet-authority-{{ section.id }} *,
-  #vet-authority-{{ section.id }} *::before,
-  #vet-authority-{{ section.id }} *::after {
+  #vet-authority-{{ section.id }} * {
+    font-family: inherit;
+  }
+
+  #vet-authority-{{ section.id }} * {
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
   }
 
   .va-{{ section.id }}__container {
